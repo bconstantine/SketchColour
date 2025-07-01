@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sketch Colorization - Demo Gallery</title>
+
+    <style>
+      :root {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+          sans-serif;
+        line-height: 1.5;
+        --bg: #0d1117;
+        --fg: #e6edf3;
+        --accent: #796d02;
+        --warn-bg: #858282;
+        --warn-fg: #fff;
+        --info-bg: #a7abaf;
+        --info-fg: #fff;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+      }
+
+      /* HEADER */
+      header {
+        padding: 2rem 1rem;
+        text-align: center;
+        border-bottom: 1px solid #30363d;
+      }
+      header h1 { margin: 0; font-size: 2.2rem; }
+      header .authors,
+      header .dept {
+        margin: 0.2rem 0;
+        font-size: 1rem;
+        font-weight: 500;
+        opacity: 0.9;
+      }
+      header .dept { opacity: 0.75; }
+      header p.description {
+        margin-top: 0.5rem;
+        max-width: 60ch;
+        margin-inline: auto;
+        opacity: 0.8;
+      }
+
+      /* MESSAGES */
+      .warning {
+        background: var(--warn-bg);
+        color: var(--warn-fg);
+        padding: 0.5rem 1rem;
+        text-align: center;
+        font-weight: bold;
+      }
+      .info {
+        background: var(--info-bg);
+        color: var(--info-fg);
+        padding: 0.5rem 1rem;
+        text-align: center;
+      }
+
+      /* TABLE */
+      .table-container { overflow-x: auto; padding: 1rem; max-width: 1200px; margin: 2rem auto; }
+      .table-container table { width: 100%; border-collapse: collapse; margin: 0 auto; }
+      .table-container th,
+      .table-container td {
+        border: 1px solid #444;
+        padding: 0.5rem;
+        text-align: center;
+      }
+      .table-container th { background: #222; color: #fff; }
+      .table-container tr.group-header th {
+        background: var(--accent);
+        color: #fff;
+        font-size: 1.1rem;
+      }
+      .table-caption { text-align: center; font-style: italic; margin-top: 0.5rem; }
+
+      /* DEMO GRID */
+      .demo-section { padding: 2rem 1rem; max-width: 1200px; margin-inline: auto; }
+      .demo-section h2 {
+        margin-top: 0;
+        font-size: 1.5rem;
+        border-left: 4px solid var(--accent);
+        padding-left: 0.5rem;
+      }
+      .demo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1rem;
+      }
+      .card {
+        background: #161b22;
+        border: 1px solid #30363d;
+        border-radius: 6px;
+        padding: 0.5rem;
+      }
+      .card h3 { margin: 0 0 0.3rem 0; font-size: 1rem; }
+      .card video {
+        width: 100%;
+        height: auto;
+        border-radius: 4px;
+        display: block;
+        background: #000;
+        cursor: pointer;
+      }
+
+      /* FOOTER */
+      footer { text-align: center; padding: 2rem 0 3rem; font-size: 0.9rem; opacity: 0.6; }
+
+      /* LIGHT THEME */
+      @media (prefers-color-scheme: light) {
+        :root {
+          --bg: #ffffff;
+          --fg: #24292e;
+          --accent: #1f883d;
+          --warn-bg: #d94a4a;
+          --info-bg: #4c8ed9;
+        }
+        .card { background: #f6f8fa; border-color: #d0d7de; }
+        .table-container th { background: #ddd; color: #24292e; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>Demo of SketchColour:<br />Channel Concat Guided DiT-based Sketch-to-Colour Pipeline for 2D Animation</h1>
+      <p class="authors">Bryan Constantine Sadihin, Michael Hua Wang, Shei Pern Chua</p>
+      <p class="dept">Department of Computer Science<br />Tsinghua University</p>
+      <p class="description">Comparative results for our <strong>Sketch-to-Color Video Diffusion</strong> model against prior work (LVCD, ToonCrafter, AniDoc) across scenes of SAKUGA validation dataset.</p>
+    </header>
+
+    <div class="warning">HOLD ON! There are a lot of videos to load here, make sure to take time scrolling to avoid crashing the page</div>
+    <div class="info">The video will play once; press any of the videos again to restart the scenes altogether</div>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr class="group-header"><th colspan="6">14 Frames</th></tr>
+          <tr><th>Method</th><th>MSCE ↓</th><th>PSNR ↑</th><th>SSIM ↑</th><th>LPIPS ↓</th><th>FVD ↓</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>AniDoc</td><td>2612.61 (±4823.98)</td><td>18.04 (±4.99)</td><td>0.73 (±0.12)</td><td>0.30 (±0.13)</td><td>898.19 (±704.30)</td></tr>
+          <tr><td>LVCD</td><td>7937.33 (±4727.72)</td><td>10.00 (±2.75)</td><td>0.57 (±0.16)</td><td>0.45 (±0.12)</td><td>2738.45 (±1555.28)</td></tr>
+          <tr><td><strong>SketchColour (Ours)</strong></td><td><strong>2214.18 (±3867.13)</strong></td><td><strong>20.23 (±5.82)</strong></td><td><strong>0.79 (±0.12)</strong></td><td><strong>0.24 (±0.14)</strong></td><td><strong>829.27 (±723.77)</strong></td></tr>
+          <tr class="group-header"><th colspan="6">16 Frames</th></tr>
+          <tr><td>ToonCrafter</td><td>4619.98 (±4086.97)</td><td>13.06 (±3.52)</td><td>0.56 (±0.13)</td><td>0.47 (±0.13)</td><td>1464.59 (±1030.63)</td></tr>
+          <tr><td><strong>SketchColour (Ours)</strong></td><td><strong>2403.40 (±4075.10)</strong></td><td><strong>19.75 (±5.83)</strong></td><td><strong>0.78 (±0.12)</strong></td><td><strong>0.25 (±0.14)</strong></td><td><strong>860.78 (±750.60)</strong></td></tr>
+          <tr class="group-header"><th colspan="6">17 Frames</th></tr>
+          <tr><td><strong>SketchColour (Ours)</strong></td><td><strong>2512.78 (±4190.19)</strong></td><td><strong>19.51 (±5.83)</strong></td><td><strong>0.78 (±0.12)</strong></td><td><strong>0.25 (±0.14)</strong></td><td><strong>918.70 (±771.13)</strong></td></tr>
+        </tbody>
+      </table>
+      <p class="table-caption">Quantitative comparison of mean (± std) video colorization methods at different frame lengths. Results follow the same frame counts as baselines for fair comparison.</p>
+    </div>
+
+    <main id="gallery"></main>
+
+    <footer>Built with ♥ and GitHub Pages · <a href="https://github.com/&lt;YOUR-USERNAME&gt;/&lt;REPO-NAME&gt;">source code</a></footer>
+
+    <script>
+      // Scene basenames
+      const basenames = [
+        "105678-Scene-6","109669-Scene-2","110083-Scene-3","112964-Scene-11","113239-Scene-4",
+        "113466-Scene-4","121433-Scene-38","122358-Scene-11","123580-Scene-19","123804-Scene-25",
+        "110493-Scene-2","124253-Scene-23","130490-Scene-2","131027-Scene-24","135093-Scene-16",
+        "141996-Scene-6","159969-Scene-9","168228-Scene-26","168884-Scene-8","175444-Scene-11",
+        "176156-Scene-3","182477-Scene-3","188891-Scene-6","189517-Scene-27","196373-Scene-2",
+        "196738-Scene-2","201867-Scene-25","214106-Scene-7","22007-Scene-3","222180-Scene-5",
+        "233988-Scene-3","238108-Scene-11","243204-Scene-16","247213-Scene-12","37170-Scene-19",
+        "37397-Scene-2","50295-Scene-11","56961-Scene-3","60668-Scene-4","64303-Scene-10",
+        "65769-Scene-5","77934-Scene-11","81204-Scene-7","86622-Scene-1"
+      ];
+
+      // Tags & slugs
+      const tags = [
+        ["Ground Truth Video", "ground_truth"],
+        ["Ground Truth Sketch", "ground_truth_sketch"],
+        ["SketchColour (Ours)", "sketchcolour"],
+        ["LVCD", "lvcd"],
+        ["ToonCrafter", "tooncrafter"],
+        ["AniDoc", "AniDoc"]
+      ];
+
+      const basePath = "assets/videos";
+      const gallery = document.getElementById("gallery");
+
+      // Play/pause on visibility
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const vid = entry.target;
+          if (entry.isIntersecting) {
+            if (!vid.src) vid.src = vid.dataset.src;
+            vid.play();
+          } else vid.pause();
+        });
+      }, { threshold: 0.25 });
+
+      // Build sections
+      basenames.forEach((base, idx) => {
+        const section = document.createElement("section");
+        section.className = "demo-section";
+        section.id = `scene-${idx+1}`;
+        section.innerHTML = `
+          <h2>Scene ${idx+1}: <code>${base}</code></h2><div class="demo-grid"></div>
+        `;
+        const grid = section.querySelector(".demo-grid");
+        tags.forEach(([label, slug]) => {
+          const suffix = slug === "ground_truth_sketch" ? "-Crop_sketch.mp4" : "-Crop.mp4";
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+            <h3>${label}</h3>
+            <video muted playsinline preload="none" data-src="${basePath}/${slug}/${base}${suffix}" poster="${basePath}/${slug}/${base}-poster.jpg"></video>
+          `;
+          grid.appendChild(card);
+        });
+        gallery.appendChild(section);
+      });
+
+      // Observe & click-to-restart
+      document.querySelectorAll(".card video").forEach(vid => {
+        io.observe(vid);
+        vid.addEventListener("click", () => {
+          const section = vid.closest(".demo-section");
+          section.querySelectorAll("video").forEach(v => {
+            if (!v.src) v.src = v.dataset.src;
+            v.currentTime = 0;
+            v.play();
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

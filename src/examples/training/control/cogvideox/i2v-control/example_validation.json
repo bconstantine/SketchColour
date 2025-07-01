@@ -1,0 +1,14 @@
+{
+  "data": [
+    {
+      "caption": "An anime scene features a bridge set against a blue sky, with a serene outdoor backdrop of water, pier, and clouds.",
+      "image_path": "dataset/finetrainers_val/images/167864-Scene-23-Key_Start.png",
+      "control_video_path": "dataset/finetrainers_val/sketches/167864-Scene-23-Crop_sketch.mp4",
+      "num_inference_steps": 50,
+      "height": 480,
+      "width": 720,
+      "num_frames": 17,
+      "frame_rate": 25
+    }
+  ]
+}

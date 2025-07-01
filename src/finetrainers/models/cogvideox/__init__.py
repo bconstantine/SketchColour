@@ -1,0 +1,2 @@
+from .base_specification import CogVideoXModelSpecification
+from .control_specification import CogVideoXControlModelSpecification

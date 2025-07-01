@@ -1,0 +1,13 @@
+{
+  "datasets": [
+    {
+      "data_root": "dataset/finetrainers_train_80",
+      "dataset_type": "i2v-control",
+      "video_resolution_buckets": [
+        [17, 480, 720]
+      ],
+      "reshape_mode": "bicubic",
+      "remove_common_llm_caption_prefixes": true
+    }
+  ]
+}
