@@ -115,12 +115,12 @@ You may configure GPU use by modifying `train.sh`. Refer to the `finetrainers` d
 
 We also wrote a custom inference script, again using [`finetrainers`](https://github.com/a-r-r-o-w/finetrainers). Our inference script implements torch compilation, VAE slicing, VAE tiling, and CPU offloading, which compresses peak GPU memory usage to 37GB per GPU per batch (DDP). Each video (using 50 deionization steps) takes around 15 minutes to complete.
 
-As `diffusers` CPU offloading is incompatbile with multi-GPU inference, we implemented parallel processing for inference by running one single main shell script (`run.sh`) that delegates work to sub-processes (`mini_run.sh`). 
+As `diffusers` CPU offloading is incompatbile with multi-GPU inference, we implemented parallel processing for inference by running one single main shell script (`inference.sh`) that delegates work to sub-processes (`mini_run.sh`). 
 
 To run inference, run the provided script:
 ```bash
 conda activate sketchcolour
-./src/examples/training/control/cogvideox/i2v-control/run.sh
+./src/examples/training/control/cogvideox/i2v-control/inference.sh
 ```
 
 You may configure GPU use by modifying `run.sh`. Refer to the `finetrainers` documentation for details on the appropriate arguments. 
