@@ -1,18 +1,15 @@
-# SketchColour: Channel Concat Guided  DiT-based Sketch-to-Colour Pipeline for 2D Animation
+# SketchColour: Channel Concat Guided DiT-based Sketch-to-Colour Pipeline for 2D Animation
+
 <a href="https://bconstantine.github.io/SketchColour"><img src="https://img.shields.io/static/v1?label=Project&message=Website&color=blue"></a>
 <a href="https://arxiv.org/pdf/2507.01586"><img src="https://img.shields.io/badge/arXiv-2507.01586-b31b1b.svg"></a>
 <a href="https://www.apache.org/licenses/LICENSE-2.0.txt"><img src="https://img.shields.io/badge/License-Apache-yellow"></a>
 
-
-
 > <a href="https://bconstantine.github.io/">**SketchColour: Channel Concat Guided DiT-based Sketch-to-Colour Pipeline for 2D Animation**</a>
->
 
-> SketchColour receives colored first frame and entire scene in sketch format, then colors each frame based on the reference. Evaluated on the SAKUGA dataset, SketchColour outperforms state-of-the-art video colourization methods—including LVCD, ToonCrafter,  and AniDoc across all metrics, despite using only half the training data of competing models. Our result produces accurate colorization results compared to pre-vious works, adhering closely to the sketch reference whileminimizing color bleeding.
+> SketchColour receives the colored first frame and the entire scene in sketch format, then colors each frame based on the reference. Evaluated on the SAKUGA dataset, SketchColour outperforms state-of-the-art video colourization methods (including LVCD, ToonCrafter, and AniDoc) across all metrics, despite using only half the training data of competing models. Our result produces accurate colorization results compared to previous works, adhering closely to the sketch reference while minimizing color bleeding.
 </p>
 
-**Please see our [demo page](https://bconstantine.github.io/SketchColour) for the result**
-
+**Please see our [demo page](https://bconstantine.github.io/SketchColour) for results**
 
 </p>
 
@@ -25,35 +22,42 @@
 
 
 ## Requirements
- We implement all of our solutions in PyTorch.   All of our  implementations  were  executed  on  2  NVIDIA  A40  GPUs (DDP). 
+
+SketchColour is implemented using PyTorch. Training and inference were performed on 2 NVIDIA A40 GPUs (DDP). 
  
- We use mixedprecision training, using float32 precision for the trans-formers and bfloat16 precision for the remaining com-ponents during training.  We also used latent precomputa-tion,  CPU  offloading,  and  VAE  slicing  and  tiling,  during training, with the latter three techniques used for inference as well.  This resulted in a 28GB memory requirement fortraining and 37GB memory requirement for inference foreach GPU. To speed up the training process, we used torch.compilation.
+We use mixed precision during training, using `float32` precision for the transformers and `bfloat16` precision for the remaining components. We used latent precomputation for training as well, while CPU offloading, VAE slicing, and VAE tiling were used for both training and inference. This results in a per-GPU memory requirement of 28GB for training and 37GB for inference. To speed up the training process, we used Torch compilation.
 
 
 ## Setup
-```
+
+```bash
 git clone https://github.com/bconstantine/SketchColour.git
 cd SketchColour
 ```
 
 ## Environment
-We setup two different environment for each preprocessing and training/inference. For preprocessing, please use the following environment
-```
+We use separate `conda` environments for data preprocessing and for training and inference.
+
+For data preprocessing, please use the following environment:
+
+```bash
 conda create -n sketchcolour_preprocess python=3.8
 pip install -r requirements.txt
 ```
 
-To set up our training/inference environment in Linux, please run:
-```
+To set up the training and inference environment, use:
+
+```bash
 conda create --name sketchcolour --clone sketchcolour.yml
 ```
 
 ## Dataset
-We use SAKUGA Dataset for our training, validation, and test dataset, refer to this repository for download [SAKUGA Dataset](https://github.com/KytraScript/SakugaDataset) repository. 
 
-### Preprocess
-Download the video of Sakuga Dataset, and place them in the following directory tree:
-```
+We used the SAKUGA Dataset as the basis for our training, validation, and test datasets. This dataset can be found on GitHub [here](https://github.com/KytraScript/SakugaDataset).
+
+### Preprocessing
+Download the Sakuga Dataset, and place the files in the following directory structure:
+```bash
 .
 ├── dataset
 │   ├── sampled_train
@@ -66,58 +70,64 @@ Download the video of Sakuga Dataset, and place them in the following directory 
 │   └── sampled_test (same structure as sampled_train)
 ```
 
-Run the scene splits, video cropping, and keyframe generation by using
-```
+Preprocessing consists of three steps: scene splitting, video cropping, and keyframe generation. We have provided convenience scripts to run these steps:
+
+```bash
 conda activate sketchcolour_preprocess
 ./run_video_splitting_sampled_train.sh
 ./run_video_splitting_sampled_val.sh
 ./run_video_splitting_sampled_test.sh
 ```
-To run the sketch generation, First, download the  `netG_A_latest` in [InformativeDrawings](https://github.com/carolineec/informative-drawings) repository. Put those weights in `weights/` folder. Run the sketch generation by using
 
-```
+To run the sketch generation, first download the `netG_A_latest` model, available from the [InformativeDrawings](https://github.com/carolineec/informative-drawings) repository. After putting those weights into the `weights/` folder, sketch generation can be run as follows:
+
+```bash
 conda activate sketchcolour_preprocess
 ./run_sketch_generation_sampled_train.sh
 ./run_sketch_generation_sampled_val.sh
 ./run_sketch_generation_sampled_test.sh
 ```
-Finally, our training script requires the format to be similar as CogVideoX training structure, use this script to restructure the file format
-```
+
+Finally, our training script requires the input format to be similar to the training structure for CogVideoX. We provide a script to restructure the files accordingly:
+
+```bash
 conda activate sketchcolour_preprocess
 python preprocess/cogvideox_preprocess_required_format.py
 ```
 
-
 ## Checkpoints
-Our full weights can be downloaded in this [Tsinghua Cloud](https://cloud.tsinghua.edu.cn/d/96710f8b65d6435eab41/). Paste the `final_model/` folder in `src/train_logs`
 
-
+Our full weights can be downloaded [here](https://cloud.tsinghua.edu.cn/d/96710f8b65d6435eab41/). Paste the `final_model/` folder into `src/train_logs`
 
 ## Training
-We custom our own training script based on the [finetrainers](https://github.com/a-r-r-o-w/finetrainers) repository. We use CogVideoX-I2V-5B as our base model and finetrainers repository for the framework. Our training script implement torch compile, VAE Slicing/Tiling, and CPU Offloading, which successfully compress our Peak GPU usage to be 28GB per GPU per batch (DDP). 
 
-To run training, run the bash script
+We wrote a custom training script using [`finetrainers`](https://github.com/a-r-r-o-w/finetrainers), using `CogVideoX-I2V-5B` as our base model. Our training script implements torch compilation, VAE slicing, VAE tiling, and CPU offloading, which compresses peak GPU memory usage to 28GB per GPU per batch (DDP). 
+
+For training, run the provided script:
 ```bash
 conda activate sketchcolour
 ./src/examples/training/control/cogvideox/i2v-control/train.sh
 ```
-Scale the amount of and which GPU freely from the training script, refer the finetrainers repository for the detailed argument details. We run the training script for 40K steps and 2 batch size, which takes around 4 days to complete.
+
+You may configure GPU use by modifying `train.sh`. Refer to the `finetrainers` documentation for details on the appropriate arguments. We ran training for 40K steps and a batch size of 2, which took roughly 4 days to complete.
 
 ## Inference
-Additionally, we also customize inference script based on the [finetrainers](https://github.com/a-r-r-o-w/finetrainers) repository. Our inference script implement torch compile, VAE Slicing/Tiling, and CPU Offloading, which successfully compress our Peak GPU usage to be 37GB per GPU per batch (DDP). Each video (with 50 steps of denoising) takes around 15 minutes to complete.
 
-Due to the reason that diffusers CPU offloading disallows multigpu for one process, we engineered the parallel processing of the inference by running one single main shell script (`run.sh`), that will execute mini shell scripts (`mini_run.sh`). 
+We also wrote a custom inference script, again using [`finetrainers`](https://github.com/a-r-r-o-w/finetrainers). Our inference script implements torch compilation, VAE slicing, VAE tiling, and CPU offloading, which compresses peak GPU memory usage to 37GB per GPU per batch (DDP). Each video (using 50 deionization steps) takes around 15 minutes to complete.
 
-To run training, run the bash script
+As `diffusers` CPU offloading is incompatbile with multi-GPU inference, we implemented parallel processing for inference by running one single main shell script (`run.sh`) that delegates work to sub-processes (`mini_run.sh`). 
+
+To run inference, run the provided script:
 ```bash
 conda activate sketchcolour
 ./src/examples/training/control/cogvideox/i2v-control/run.sh
 ```
-Scale the amount of and which GPU freely from the run.sh script, refer the finetrainers repository for the detailed argument details. 
+
+You may configure GPU use by modifying `run.sh`. Refer to the `finetrainers` documentation for details on the appropriate arguments. 
 
 ## 🤝 Acknowledgements
 
-We would like to express our gratitude to the following open-source projects that have been instrumental in the development of our project:
+We would like to express our gratitude to the following open-source projects that have been instrumental during our development process:
 
 - [CogVideo](https://github.com/THUDM/CogVideo): An open source video generation framework by THUKEG, which we use as our DiT base model. 
 - [finetrainers](https://github.com/a-r-r-o-w/finetrainers): A Memory-optimized training library for diffusion models. Our whole training and inference architecture use finetrainers repository as its base. 
@@ -127,7 +137,7 @@ Special thanks to the contributors of these work for their hard work and dedicat
 
 ## Citation
 If you find this work useful, please consider giving a star and citing it!
-```
+```bibtex
 @article{sadihin2025sketchcolour,
   author       = {Bryan Constantine Sadihin and Michael Hua Wang and
                   Shei Pern Chua and Hang Su},
