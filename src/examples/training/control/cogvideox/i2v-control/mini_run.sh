@@ -31,8 +31,8 @@ model_cmd=(
 # Control arguments
 control_cmd=(
   --control_type custom
-  --rank 128
-  --lora_alpha 128
+  --rank 192
+  --lora_alpha 192
   --target_modules "blocks.*(to_q|to_k|to_v|to_out.0|ff.net.0.proj|ff.net.2)"
   --frame_conditioning_type full
   --frame_conditioning_index 0
@@ -66,15 +66,13 @@ training_cmd=(
   --training_type control-lora
   --seed 42
   --batch_size 1
-  --train_steps 200000
+  --train_steps 40000
   --gradient_accumulation_steps 1
   --gradient_checkpointing
-  #--checkpointing_steps 5000
   --checkpointing_limit 40
-  #--resume_from_checkpoint 55000
+  --resume_from_checkpoint 40000
   --enable_slicing
-  #--enable_tiling
-  #--attn_provider_training "_native_flash"
+  --enable_tiling
 )
 
 # Optimizer arguments
@@ -94,8 +92,6 @@ optimizer_cmd=(
 validation_cmd=(
   --validation_dataset_file "$VAL_FILE"
   --resume_from_checkpoint "$CKPT"
-  # NOTE:  ↓ turn OFF offloading because we are single GPU
-  #        If you want *on-GPU* bfloat16, leave the flag out.
   --enable_model_cpu_offload        # <-- remove / comment
   --force_every_validation_to_be_bfloat16
 )
