@@ -125,3 +125,17 @@ We would like to express our gratitude to the following open-source projects tha
 - [sakuga](https://github.com/KytraScript/SakugaDataset): A large-scale animation dataset. We use SAKUGA dataset for our training and evaluation processes. 
 
 Special thanks to the contributors of these work for their hard work and dedication!
+
+## Citation
+If you find this work useful, please consider giving a star and citing it!
+```
+@article{sadihin2025sketchcolour,
+  author       = {Bryan Constantine Sadihin and Michael Hua Wang and
+                  Shei Pern Chua and Hang Su},
+  title        = {SketchColour: Channel Concat Guided DiT-based Sketch-to-Colour
+                  Pipeline for 2D Animation},
+  journal      = {arXiv preprint arXiv:2507.01586},
+  year         = {2025},
+  note         = {URL: \url{https://arxiv.org/abs/2507.01586}}
+}
+```

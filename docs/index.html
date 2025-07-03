@@ -113,32 +113,83 @@
         gap:0.75rem;
       }
 
-      .github-btn{
-        display:inline-flex; align-items:center; gap:.45rem;
-        padding:.45rem .9rem;
-        background:#24292e;            /* GitHub dark */
-        color:#fff; font-weight:600; font-size:.9rem;
-        border-radius:6px; text-decoration:none;
-        border:1px solid #30363d;
+      .github-btn,
+      .arxiv-btn{
+        display:inline-flex;
+        align-items:center;
+        gap:.45rem;
+
+        padding:.45rem .9rem;           /* same inset */
+        font-size:.9rem; font-weight:600;
+        border-radius:6px;              /* rounded rectangle, not a pill */
+        border:1px solid;               /* individual colours below   */
+        text-decoration:none;
         transition:background .2s, transform .1s;
       }
-      .github-btn svg{width:1em;height:1em;fill:currentColor;}
+
+      /* GitHub colours (unchanged) */
+      .github-btn{
+        background:#24292e;        /* dark */
+        color:#fff;
+        border-color:#30363d;
+      }
       .github-btn:hover{background:#57606a;transform:translateY(-1px);}
       .github-btn:active{transform:translateY(0);}
+      .github-btn svg{width:1em;height:1em;fill:currentColor;}
 
-      
+      /* arXiv / PDF colours (new) */
       .arxiv-btn{
-        display:inline-flex;align-items:center;gap:.5rem;
-        padding:6px 18px;border-radius:9999px;
-        background:#2b2b2b;color:#fff;font-weight:500;
-        text-decoration:none;transition:background .2s ease;
+        background:#b31b1b;        /* arXiv red */
+        color:#fff;
+        border-color:#a51a1a;
       }
-      .arxiv-btn:hover{background:#424242;}
-      .arxiv-btn svg{width:16px;height:16px;fill:currentColor;}
+      .arxiv-btn:hover{background:#c63d3d;transform:translateY(-1px);}
+      .arxiv-btn:active{transform:translateY(0);}
+      .arxiv-btn svg{width:1em;height:1em;fill:currentColor;}
 
-      @media(prefers-color-scheme:light){
-        .github-btn{background:#f6f8fa;color:#24292e;border-color:#d0d7de;}
+      /* Light-mode tweaks */
+      @media (prefers-color-scheme:light){
+        .github-btn{
+          background:#f6f8fa;color:#24292e;border-color:#d0d7de;
+        }
         .github-btn:hover{background:#dde1e5;}
+
+        .arxiv-btn{
+          background:#fff5f5;color:#b31b1b;border-color:#f2dcdc;
+        }
+        .arxiv-btn:hover{background:#fde8e8;}
+      }
+
+      .citation-row{
+        max-width: 800px;
+        margin: 3rem auto 4rem;
+        padding: 1.5rem;
+        background:#161b22;
+        border:1px solid #30363d;
+        border-radius:8px;
+        text-align:center;
+      }
+
+      .citation-row h2{
+        margin-top:0;
+        font-size:1.25rem;
+      }
+
+      .citation-row pre{
+        background:#0d1117;
+        color:#e6edf3;
+        padding:1rem;
+        border-radius:6px;
+        overflow-x:auto;
+        font-size:.85rem;
+        line-height:1.4;
+        margin:1rem 0 1.5rem;
+      }
+
+      /* Light-mode tweaks */
+      @media(prefers-color-scheme:light){
+        .citation-row{background:#f6f8fa;border-color:#d0d7de;}
+        .citation-row pre{background:#fff;color:#24292e;border:1px solid #d0d7de;}
       }
 
       /* FOOTER */
@@ -227,7 +278,24 @@
     </div>
 
     <main id="gallery"></main>
+    <section class="citation-row">
+      <h2>Cite&nbsp;this&nbsp;work</h2>
 
+      <pre id="bibtex">
+    @article{sadihin2025sketchcolour,
+      author  = {Bryan Constantine Sadihin and Michael Hua Wang and
+                Shei Pern Chua and Hang Su},
+      title   = {SketchColour: Channel Concat Guided DiT-based Sketch-to-Colour
+                Pipeline for 2D Animation},
+      journal = {arXiv preprint arXiv:2507.01586},
+      year    = {2025},
+      url     = {https://arxiv.org/abs/2507.01586}
+    }</pre>
+
+      <button class="github-btn copy-btn" onclick="copyBibtex()">
+        Copy&nbsp;BibTeX
+      </button>
+    </section>
     <footer>Built with ♥ and GitHub Pages · <a href="https://github.com/&lt;YOUR-USERNAME&gt;/&lt;REPO-NAME&gt;">source code</a></footer>
 
     <script>
@@ -302,6 +370,17 @@
           });
         });
       });
+
+       // ── Copy BibTeX button ─────────────────────────────────────────
+      function copyBibtex(){
+        const bib = document.getElementById('bibtex').innerText;
+        navigator.clipboard.writeText(bib).then(()=>{
+          const btn = document.querySelector('.copy-btn');
+          const txt = btn.innerHTML;
+          btn.innerHTML = 'Copied!';
+          setTimeout(()=>btn.innerHTML = txt, 1600);
+        });
+      }
     </script>
   </body>
 </html>
