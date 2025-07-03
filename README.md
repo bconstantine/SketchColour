@@ -1,6 +1,6 @@
 # SketchColour: Channel Concat Guided  DiT-based Sketch-to-Colour Pipeline for 2D Animation
 <a href="https://bconstantine.github.io/SketchColour"><img src="https://img.shields.io/static/v1?label=Project&message=Website&color=blue"></a>
-<!-- <a href="https://arxiv.org/pdf/2412.14173"><img src="https://img.shields.io/badge/arXiv-2412.14173-b31b1b.svg"></a> -->
+<a href="https://arxiv.org/pdf/2507.01586"><img src="https://img.shields.io/badge/arXiv-2507.01586-b31b1b.svg"></a>
 <a href="https://www.apache.org/licenses/LICENSE-2.0.txt"><img src="https://img.shields.io/badge/License-Apache-yellow"></a>
 
 

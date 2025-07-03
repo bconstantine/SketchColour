@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Sketch Colorization - Demo Gallery</title>
+    <title>SketchColour - Demo Gallery</title>
 
     <style>
       :root {
@@ -108,6 +108,11 @@
         cursor: pointer;
       }
 
+      .btn-row{
+        display:inline-flex; 
+        gap:0.75rem;
+      }
+
       .github-btn{
         display:inline-flex; align-items:center; gap:.45rem;
         padding:.45rem .9rem;
@@ -120,6 +125,16 @@
       .github-btn svg{width:1em;height:1em;fill:currentColor;}
       .github-btn:hover{background:#57606a;transform:translateY(-1px);}
       .github-btn:active{transform:translateY(0);}
+
+      
+      .arxiv-btn{
+        display:inline-flex;align-items:center;gap:.5rem;
+        padding:6px 18px;border-radius:9999px;
+        background:#2b2b2b;color:#fff;font-weight:500;
+        text-decoration:none;transition:background .2s ease;
+      }
+      .arxiv-btn:hover{background:#424242;}
+      .arxiv-btn svg{width:16px;height:16px;fill:currentColor;}
 
       @media(prefers-color-scheme:light){
         .github-btn{background:#f6f8fa;color:#24292e;border-color:#d0d7de;}
@@ -141,6 +156,7 @@
         .card { background: #f6f8fa; border-color: #d0d7de; }
         .table-container th { background: #ddd; color: #24292e; }
       }
+
     </style>
   </head>
 
@@ -150,7 +166,18 @@
       <p class="authors">Bryan Constantine Sadihin, Michael Hua Wang, Shei Pern Chua</p>
       <p class="dept">Department of Computer Science<br />Tsinghua University</p>
       <p class="description">Comparative results for our <strong>Sketch-to-Color Video Diffusion</strong> model against prior work (LVCD, ToonCrafter, AniDoc) across scenes of SAKUGA validation dataset.</p>
-      <a class="github-btn"
+      <div class="btn-row">
+        <a class="arxiv-btn"
+          href="https://arxiv.org/abs/2507.01586"
+          target="_blank" rel="noopener"
+          aria-label="View pre-print on arXiv">
+          <!-- simple-icons “arXiv” glyph (24 × 24) -->
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M11.445 0l-.12.095-7.825 11.05L.121 24h4.91l1.85-3.003h10.225L18.755 24h5.124l-3.28-12.855h-.007l-7.825-11.05L11.566 0h-.12zm.12 2.748l5.93 8.373H5.635l5.93-8.373zM7.519 14.545l-.613 1.005H4.151l1.693-2.749h4.567l.61.962H7.52zm9.017 0h-3.602l-.61-.961h4.566l1.692 2.748h-2.754l-.613-1.005z"/>
+          </svg>
+          ArXiv
+        </a>
+        <a class="github-btn"
         href="https://github.com/bconstantine/SketchColour"
         target="_blank" rel="noopener"
         aria-label="View source code on GitHub">
@@ -170,7 +197,10 @@
                   C20.565 22.092 24 17.592 24 12.297 24 5.67 18.627.297 12 .297z"/>
         </svg>
         Code
-      </a>
+        </a>
+
+      </div>
+      
     </header>
 
     <div class="warning">HOLD ON! There are a lot of videos to load here, make sure to take time scrolling to avoid crashing the page</div>
