@@ -16,7 +16,7 @@
 ## TODO List
 
 - [x] Release the paper and demo page. Visit [https://bconstantine.github.io/SketchColour](https://bconstantine.github.io/SketchColour) 
-- [x] Release the inference code.
+- [x] Release the inference code. We also load some inference samples (first frame, caption, and sketch) that we take from Sakuga Dataset. 
 - [x] Release the training code.
 - [ ] Build Gradio Demo
 
