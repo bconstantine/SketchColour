@@ -65,7 +65,7 @@ dependencies:
       - click==8.1.8
       - datasets==3.5.1
       - decord==0.6.0
-      - diffusers==0.34.0.dev0
+      - diffusers==0.34.0
       - dill==0.3.8
       - docker-pycreds==0.4.0
       - filelock==3.18.0

@@ -1,34 +1,28 @@
 #!/usr/bin/env bash
 set -euo pipefail
-VAL_FILE=$1          # e.g. validation_part_0.json
-CKPT=$2              # e.g. 10000 or /path/to/ckpt
+VAL_FILE=$1  
+CKPT=$2     
 OUTDIR=$3
 
-# Re-use almost everything from your original run.sh.
-# We just override the bits that must be different for inference-only, 1-GPU.
 
 NUM_GPUS=1
 BACKEND="ptd"                 # keep identical to training code
 CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:?CUDA_VISIBLE_DEVICES not set — shard launcher aborted}
-TRAINING_DATASET_CONFIG="examples/training/control/cogvideox/i2v-control/training_real.json"
-# --------------------------------------------------------------------------- #
-# ---- the block below is *copy-pasted* from run.sh and lightly trimmed ----  #
-# --------------------------------------------------------------------------- #
+TRAINING_DATASET_CONFIG="./src/examples/training/control/cogvideox/i2v-control/training.json" 
+
 DDP_1="--parallel_backend $BACKEND --pp_degree 1 --dp_degree 1 --dp_shards 1 \
        --cp_degree 1 --tp_degree 1"
 
 parallel_cmd=( $DDP_1 )
 
-# (model_cmd, control_cmd, etc. … keep exactly as in run.sh) ------------------
 model_cmd=(
   --model_name "cogvideox"
   --pretrained_model_name_or_path "THUDM/CogVideoX-5b-I2V"
   --compile_modules transformer
-  --cache_dir /gpfs/junlab/wangwanding24/hub
+  --cache_dir /gpfs/junlab/wangwanding24/hub #Your Hugingface Hub cache datapath, for CogVideoX-5b-I2V Model
   --image_pipeline
 )
 
-# Control arguments
 control_cmd=(
   --control_type custom
   --rank 192
@@ -38,30 +32,21 @@ control_cmd=(
   --frame_conditioning_index 0
 )
 
-# Dataset arguments
 dataset_cmd=(
   --dataset_config $TRAINING_DATASET_CONFIG
   --dataset_shuffle_buffer_size 32
   --enable_precomputation
   --precomputation_items 100
-  #--enable_reuse #if the precomputed data already exists
-  #--precomputation_reuse
 )
 
-# Dataloader arguments
 dataloader_cmd=(
   --dataloader_num_workers 0
-  #--precomputation_once
 )
 
-# Diffusion arguments
 diffusion_cmd=(
   --flow_weighting_scheme "logit_normal"
 )
 
-# Training arguments
-# We target just the attention projections layers for LoRA training here.
-# You can modify as you please and target any layer (regex is supported)
 training_cmd=(
   --training_type control-lora
   --seed 42
@@ -75,7 +60,6 @@ training_cmd=(
   --enable_tiling
 )
 
-# Optimizer arguments
 optimizer_cmd=(
   --optimizer "adamw"
   --lr 2e-5
@@ -92,7 +76,7 @@ optimizer_cmd=(
 validation_cmd=(
   --validation_dataset_file "$VAL_FILE"
   --resume_from_checkpoint "$CKPT"
-  --enable_model_cpu_offload        # <-- remove / comment
+  --enable_model_cpu_offload 
   --force_every_validation_to_be_bfloat16
 )
 miscellaneous_cmd=(
@@ -106,7 +90,7 @@ torchrun \
   --nproc_per_node=$NUM_GPUS \
   --rdzv_backend c10d \
   --rdzv_endpoint="localhost:29${CUDA_VISIBLE_DEVICES}42" \
-  run.py \
+  ./src/run.py \
     "${parallel_cmd[@]}" \
     "${model_cmd[@]}"     \
     "${control_cmd[@]}"   \

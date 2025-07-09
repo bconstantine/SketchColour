@@ -1,9 +1,49 @@
 {
   "data": [
     {
-      "caption": "An anime scene features a bridge set against a blue sky, with a serene outdoor backdrop of water, pier, and clouds.",
-      "image_path": "dataset/finetrainers_val/images/167864-Scene-23-Key_Start.png",
-      "control_video_path": "dataset/finetrainers_val/sketches/167864-Scene-23-Crop_sketch.mp4",
+      "caption": "a giant yellow dragon  emerges from a body of water under a blue sky, ready for battle with its electric powers in a flying attack.",
+      "image_path": "dataset/demo_files/images/example2.png",
+      "control_video_path": "dataset/demo_files/sketches/example2.mp4",
+      "num_inference_steps": 50,
+      "height": 480,
+      "width": 720,
+      "num_frames": 17,
+      "frame_rate": 25
+    },
+    {
+      "caption": "Close-up shot of Kujo Jotaro's hand, wearing a green bracelet, holding a ring under the blue sky in his school uniform.",
+      "image_path": "dataset/demo_files/images/example1.png",
+      "control_video_path": "dataset/demo_files/sketches/example1.mp4",
+      "num_inference_steps": 50,
+      "height": 480,
+      "width": 720,
+      "num_frames": 17,
+      "frame_rate": 25
+    },
+    {
+      "caption": "An anime solo portrait of a girl with red hair and intense purple eyes in a retro 1990s art style.",
+      "image_path": "dataset/demo_files/images/example3.png",
+      "control_video_path": "dataset/demo_files/sketches/example3.mp4",
+      "num_inference_steps": 50,
+      "height": 480,
+      "width": 720,
+      "num_frames": 17,
+      "frame_rate": 25
+    },
+    {
+      "caption": "A ninja with black hair and a red shirt stands in a field holding a kunai weapon, under a cloudy blue sky.",
+      "image_path": "dataset/demo_files/images/example5.png",
+      "control_video_path": "dataset/demo_files/sketches/example5.mp4",
+      "num_inference_steps": 50,
+      "height": 480,
+      "width": 720,
+      "num_frames": 17,
+      "frame_rate": 25
+    },
+    {
+      "caption": "A sketch of a figure emerging swiftly from the water, with motion lines and speed blur, reaching out in a silent comic style.",
+      "image_path": "dataset/demo_files/images/example4.png",
+      "control_video_path": "dataset/demo_files/sketches/example4.mp4",
       "num_inference_steps": 50,
       "height": 480,
       "width": 720,

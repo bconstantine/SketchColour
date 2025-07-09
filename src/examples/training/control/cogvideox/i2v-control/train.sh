@@ -2,8 +2,6 @@
 
 set -e -x
 
-# export TORCH_LOGS="+dynamo,recompiles,graph_breaks"
-# export TORCHDYNAMO_VERBOSE=1
 export WANDB_MODE="offline"
 export NCCL_P2P_DISABLE=1
 export NCCL_IB_DISABLE=1
@@ -16,16 +14,8 @@ export MKL_NUM_THREADS=2
 #Activate attn checks
 export FINETRAINERS_ATTN_CHECKS="1"
 
-# Download the validation dataset
-# if [ ! -d "examples/training/control/cogvideox/image_condition/validation_dataset" ]; then
-#   echo "Downloading validation dataset..."
-#   huggingface-cli download --repo-type dataset finetrainers/OpenVid-1k-split-validation --local-dir examples/training/control/cogvideox/image_condition/validation_dataset
-# else
-#   echo "Validation dataset already exists. Skipping download."
-# fi
 
 # Finetrainers supports multiple backends for distributed training. Select your favourite and benchmark the differences!
-# BACKEND="accelerate"
 BACKEND="ptd"
 
 # In this setting, I'm using 1 GPU on 4-GPU node for training
@@ -35,8 +25,8 @@ CUDA_VISIBLE_DEVICES="0,9"
 
 
 # Check the JSON files for the expected JSON format
-TRAINING_DATASET_CONFIG="examples/training/control/cogvideox/i2v-control/training_real_80.json"
-VALIDATION_DATASET_FILE="examples/training/control/cogvideox/i2v-control/validation_full_real.json"
+TRAINING_DATASET_CONFIG="./src/examples/training/control/cogvideox/i2v-control/training.json"
+VALIDATION_DATASET_FILE="./src/examples/training/control/cogvideox/i2v-control/example_validation.json" 
 
 # Depending on how many GPUs you have available, choose your degree of parallelism and technique!
 DDP_1="--parallel_backend $BACKEND --pp_degree 1 --dp_degree 1 --dp_shards 1 --cp_degree 1 --tp_degree 1"
@@ -59,7 +49,7 @@ model_cmd=(
   --model_name "cogvideox"
   --pretrained_model_name_or_path "THUDM/CogVideoX-5b-I2V"
   --compile_modules transformer
-  --cache_dir /gpfs/junlab/wangwanding24/hub
+  --cache_dir /gpfs/junlab/wangwanding24/hub #Your Hugingface Hub cache datapath, for CogVideoX-5b-I2V Model
   --image_pipeline
 )
 
@@ -79,14 +69,11 @@ dataset_cmd=(
   --dataset_shuffle_buffer_size 32
   --enable_precomputation
   --precomputation_items 250
-  #--enable_reuse #if the precomputed data already exists
-  #--precomputation_reuse
 )
 
 # Dataloader arguments
 dataloader_cmd=(
   --dataloader_num_workers 0
-  #--precomputation_once
 )
 
 # Diffusion arguments
@@ -94,9 +81,6 @@ diffusion_cmd=(
   --flow_weighting_scheme "logit_normal"
 )
 
-# Training arguments
-# We target just the attention projections layers for LoRA training here.
-# You can modify as you please and target any layer (regex is supported)
 training_cmd=(
   --training_type control-lora
   --seed 42
@@ -111,7 +95,6 @@ training_cmd=(
   --enable_tiling
 )
 
-# Optimizer arguments
 optimizer_cmd=(
   --optimizer "adamw"
   --lr 2e-5
@@ -125,16 +108,13 @@ optimizer_cmd=(
   --max_grad_norm 1.0
 )
 
-# Validation arguments
+# Disable validation to speed up training
 validation_cmd=(
   --validation_dataset_file "$VALIDATION_DATASET_FILE"
-  #--validation_steps 501
   --validation_steps 5000
-  #--enable_model_cpu_offload
   --disable_validation
 )
 
-# Miscellaneous arguments
 miscellaneous_cmd=(
   --tracker_name "finetrainers-cogvideox-control"
   --output_dir "src/train_logs/final_model"
@@ -179,7 +159,7 @@ elif [ "$BACKEND" == "ptd" ]; then
     --nproc_per_node=$NUM_GPUS \
     --rdzv_backend c10d \
     --rdzv_endpoint="localhost:19242" \
-    train.py \
+    ./src/train.py \
       "${parallel_cmd[@]}" \
       "${model_cmd[@]}" \
       "${control_cmd[@]}" \

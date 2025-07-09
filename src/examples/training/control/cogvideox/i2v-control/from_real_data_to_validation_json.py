@@ -29,7 +29,7 @@ def main():
     p.add_argument('--output',          help="If set, write JSON here instead of stdout")
     args = p.parse_args()
 
-    images = load_every_other_line(args.images_txt)
+    images = load_lines(args.images_txt)
     prompts = load_lines(args.prompts_txt)
     sketches = load_lines(args.sketches_txt)
 

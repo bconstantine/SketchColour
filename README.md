@@ -42,13 +42,14 @@ For data preprocessing, please use the following environment:
 
 ```bash
 conda create -n sketchcolour_preprocess python=3.8
+conda activate sketchcolour_preprocess
 pip install -r requirements.txt
 ```
 
 To set up the training and inference environment, use:
 
 ```bash
-conda create --name sketchcolour --clone sketchcolour.yml
+conda env create -f sketchcolour.yml
 ```
 
 ## Dataset

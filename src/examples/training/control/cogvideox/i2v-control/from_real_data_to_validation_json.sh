@@ -1,8 +1,9 @@
-python from_real_data_to_validation_json.py \
-  --images-dir /gpfs/junlab/wangwanding24/KeyMotion/dataset/finetrainers_val/images \
-  --sketches-dir /gpfs/junlab/wangwanding24/KeyMotion/dataset/finetrainers_val/sketches \
-  --images-txt /gpfs/junlab/wangwanding24/KeyMotion/dataset/finetrainers_val/images.txt \
-  --prompts-txt /gpfs/junlab/wangwanding24/KeyMotion/dataset/finetrainers_val/prompts.txt \
-  --sketches-txt /gpfs/junlab/wangwanding24/KeyMotion/dataset/finetrainers_val/sketches.txt \
-  --num-samples 745 \
-  --output /gpfs/junlab/wangwanding24/KeyMotion/finetrainers/examples/training/control/cogvideox/i2v-control/validation_full_real.json
+#example use
+python src/examples/training/control/cogvideox/i2v-control/from_real_data_to_validation_json.py \
+  --images-dir dataset/demo_files/images \
+  --sketches-dir dataset/demo_files/sketches \
+  --images-txt dataset/demo_files/images.txt \
+  --prompts-txt dataset/demo_files/prompts.txt \
+  --sketches-txt dataset/demo_files/sketches.txt \
+  --num-samples 5 \
+  --output src/examples/training/control/cogvideox/i2v-control/example_validation.json
